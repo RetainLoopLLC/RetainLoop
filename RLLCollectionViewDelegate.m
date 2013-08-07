@@ -29,6 +29,14 @@
     _collectionView.dataSource = (id<UICollectionViewDataSource>)self;
 }
 
+- (void)updatePageControllerCurrentPage {
+  NSInteger numPages = ceilf(_collectionView.contentSize.width / _collectionView.bounds.size.width);
+  NSInteger curPage = floor((_collectionView.contentOffset.x - _collectionView.bounds.size.width / 2) / _collectionView.bounds.size.width) + 1;
+  
+  self.pageController.numberOfPages = numPages;
+  self.pageController.currentPage = curPage;
+}
+
 #pragma mark - UICollectionView
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -49,6 +57,16 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     return nil;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+  if (self.pageController) {
+    [self updatePageControllerCurrentPage];
+  }
+  
+  if ([_delegate respondsToSelector:_cmd]) {
+    [_delegate scrollViewDidScroll:scrollView];
+  }
 }
 
 #pragma mark - Setup _delegate as surrogate object
