@@ -19,7 +19,7 @@
   }
 }
 
-- (void)settableView:(UITableView *)tableView {
+- (void)setTableView:(UITableView *)tableView {
   _tableView.delegate = nil;
   _tableView.dataSource = nil;
   
@@ -27,6 +27,12 @@
   
   _tableView.delegate = (id<UITableViewDelegate>)self;
   _tableView.dataSource = (id<UITableViewDataSource>)self;
+}
+
+- (void)setDataSource:(NSArray *)dataSource {
+  _dataSource = dataSource;
+  
+  [self.tableView reloadData];
 }
 
 - (void)updatePageControllerCurrentPage {
