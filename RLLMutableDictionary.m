@@ -28,7 +28,7 @@
   
   [invocation getArgument:&obj atIndex:2];
   
-  if (invocation.selector == @selector(setObject:forKeyedSubscript:) && obj == NULL) {
+  if ((invocation.selector == @selector(setObject:forKeyedSubscript:) || invocation.selector == @selector(setObject:forKey:)) && obj == NULL) {
     return;
   } else {
     [invocation invokeWithTarget:_proxy];
