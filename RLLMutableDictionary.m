@@ -39,4 +39,8 @@
   return [_proxy methodSignatureForSelector:aSelector];
 }
 
+- (NSString *)description {
+  return [_proxy description];
+}
+
 @end
