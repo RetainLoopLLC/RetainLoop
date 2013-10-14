@@ -28,11 +28,13 @@
   
   [invocation getArgument:&obj atIndex:2];
   
-  if ((invocation.selector == @selector(setObject:forKeyedSubscript:) || invocation.selector == @selector(setObject:forKey:)) && obj == NULL) {
+  if ((invocation.selector == @selector(setObject:forKeyedSubscript:) || invocation.selector == @selector(setObject:forKey:)) &&
+      (obj == NULL || [(__bridge id)obj isKindOfClass:[NSNull class]])) {
     return;
-  } else {
-    [invocation invokeWithTarget:_proxy];
   }
+  
+  [invocation invokeWithTarget:_proxy];
+  
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector {
