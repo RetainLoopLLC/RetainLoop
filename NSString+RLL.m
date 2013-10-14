@@ -17,4 +17,8 @@
   return [self boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: font} context:nil].size;
 }
 
++ (BOOL)isStringNilOrEmpty:(NSString *)string {
+  return ( ! string || [string isKindOfClass:[NSNull class]] || [string length] == 0);
+}
+
 @end

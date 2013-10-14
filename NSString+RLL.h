@@ -12,4 +12,6 @@
 
 - (CGSize)RLL_sizeWithFont:(UIFont *)font constrainedToSize:(CGSize)size;
 
++ (BOOL)isStringNilOrEmpty:(NSString *)string;
+
 @end
