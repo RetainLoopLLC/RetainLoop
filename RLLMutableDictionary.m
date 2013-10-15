@@ -26,11 +26,15 @@
 - (void)forwardInvocation:(NSInvocation *)invocation {
   void *obj = NULL;
   
-  [invocation getArgument:&obj atIndex:2];
+  NSMethodSignature *methodSignature = [_proxy methodSignatureForSelector:invocation.selector];
   
-  if ((invocation.selector == @selector(setObject:forKeyedSubscript:) || invocation.selector == @selector(setObject:forKey:)) &&
-      (obj == NULL || [(__bridge id)obj isKindOfClass:[NSNull class]])) {
-    return;
+  if ([methodSignature numberOfArguments] > 2) {
+    [invocation getArgument:&obj atIndex:2];
+    
+    if ((invocation.selector == @selector(setObject:forKeyedSubscript:) || invocation.selector == @selector(setObject:forKey:)) &&
+        (obj == NULL || [(__bridge id)obj isKindOfClass:[NSNull class]])) {
+      return;
+    }
   }
   
   [invocation invokeWithTarget:_proxy];
