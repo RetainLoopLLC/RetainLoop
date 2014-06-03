@@ -8,6 +8,13 @@
 
 #import "RLLCollectionViewDelegate.h"
 
+@interface RLLCollectionViewDelegate ()
+
+@property (nonatomic, strong) NSString *cellClassString;
+@property (nonatomic, strong) NSString *cellSelectorString;
+
+@end
+
 @implementation RLLCollectionViewDelegate
 
 - (void)setDelegate:(id)delegate {
@@ -37,6 +44,11 @@
   self.pageController.currentPage = curPage;
 }
 
+- (void)registerCellClass:(Class)cellClass andConfigureSelector:(SEL)configureSelector {
+  self.cellClassString = NSStringFromClass(cellClass);
+  self.cellSelectorString = NSStringFromSelector(configureSelector);
+}
+
 #pragma mark - UICollectionView
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -59,7 +71,17 @@
   if ([_delegate respondsToSelector:_cmd]) {
     return [_delegate collectionView:collectionView cellForItemAtIndexPath:indexPath];
   }
-  return nil;
+  
+  UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:self.cellClassString forIndexPath:indexPath];
+  
+  SEL selector = NSSelectorFromString(self.cellSelectorString);
+  if ([cell respondsToSelector:selector]) {
+    IMP method = [cell methodForSelector:selector];
+    void (* methodFunction)(id, SEL, id) = (void *)method;
+    methodFunction(cell, selector, self.dataSource[indexPath.item]);
+  }
+  
+  return cell;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

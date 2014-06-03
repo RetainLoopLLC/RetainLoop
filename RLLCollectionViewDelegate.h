@@ -17,5 +17,6 @@
 @property (nonatomic, assign) BOOL topArrayContainsSections;
 
 - (void)updatePageControllerCurrentPage;
+- (void)registerCellClass:(Class)cellClass andConfigureSelector:(SEL)configureSelector;
 
 @end
